@@ -43,7 +43,19 @@ var data = [
           "first_name": "Albin",
           "last_name": "Byström",
           "track_name": "Webb"
-      }
+      },
+      {
+          "user_id": 7,
+          "first_name": "Karl",
+          "last_name": "Karlsson",
+          "track_name": "Minecraft"
+      },
+      {
+          "user_id": 8,
+          "first_name": "Isak",
+          "last_name": "Ågren",
+          "track_name": "Python"
+      }     
   ];
 
 
