@@ -15,38 +15,50 @@ var test_constellation = {
     ]
 };
 
-function generateStarCoordinets (numberOfStars, constellation, x, y, scale) {
 
-    var generatedStars = [];
+function generateStarCoordinets (numberOfStars, constellation, offset, scale, wobble) {
+    
+    var generatedStars = []
 
     // Fill the fixed nodes
     for (i = 0; i < numberOfStars && i < constellation.nodes.length; i++)
         generatedStars.push( {
-            x: constellation.nodes[i].x * scale + x,
-            y: constellation.nodes[i].y * scale + y
+            x: constellation.nodes[i].x,
+            y: constellation.nodes[i].y
         } )
 
-
+    
     // fill the lines between stars
     for (i = 0; i < constellation.paths.length; i++) {
-        var path = constellation.paths[i];
-        var remaningStars = numberOfStars - generatedStars.length;
-        var starsOnThisPath = Math.floor(remaningStars / constellation.paths.length) + (i < remaningStars % constellation.paths.length);
-
-        for (j = 1; j < remaningStars + 1; j++) {
-            var deltaX = constellation.nodes[path.end].x - constellation.nodes[path.start].x;  // Dessa rader är inkorrekta, ska ta node med id: k, inte node[k]
-            var deltaY = constellation.nodes[path.end].y - constellation.nodes[path.start].y;
+        var path = constellation.paths[i]
+        var remaningStars = numberOfStars - generatedStars.length
+        var starsOnThisPath = Math.floor(remaningStars / constellation.paths.length) + (i < remaningStars % constellation.paths.length)
+        
+        for (j = 1; j < starsOnThisPath + 1; j++) {
+            var deltaX = constellation.nodes[path.end].x - constellation.nodes[path.start].x 
+            var deltaY = constellation.nodes[path.end].y - constellation.nodes[path.start].y
             var coords = {
-                x : (constellation.nodes[path.start].x + (deltaX * j / (starsOnThisPath + 1))) * scale + x,
-                y : (constellation.nodes[path.start].y + (deltaY * j / (starsOnThisPath + 1))) * scale + y
-            };
-            //console.log(i, j, deltaX, deltaY, coords);
+                x : constellation.nodes[path.start].x + (deltaX * j / (starsOnThisPath + 1)),
+                y : constellation.nodes[path.start].y + (deltaY * j / (starsOnThisPath + 1))
+            }
+            console.log(i, j, deltaX, deltaY, coords)
 
-            generatedStars.push(coords);
+            generatedStars.push(coords)
         }
     }
 
-    return generatedStars;
+
+    // Move stars according to scale. offset and wobble
+    var movedStars = generatedStars
+        .map( coord => { 
+                        x : coord.x * scale, 
+                        y : coord.y * scale } )
+        .map( coord => { x : coord.x + offset.x,
+                         y : coord.y + offset.y } )
+        .map( coord => {
+                        x : coord.x + Math.random() * wobble,
+                        y : coord.y + Math.random() * wobble } )
+
+    return movedStars
 }
 
-console.log(generateStarCoordinets( 8, test_constellation));

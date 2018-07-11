@@ -66,8 +66,9 @@ var numberOfStars = 2 * data.length;
 listOfStars = generateStarCoordinets(
   data.length,
   test_constellation,
-  width / 2,
-  height / 2, 150
+  { x : width / 2, y : height / 2 }, 
+  150,
+  0
 );
 
 console.log(listOfStars);
