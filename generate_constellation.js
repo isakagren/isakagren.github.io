@@ -50,14 +50,9 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
 
     // Move stars according to scale. offset and wobble
     var movedStars = generatedStars
-        .map( coord => { 
-                        x : coord.x * scale, 
-                        y : coord.y * scale } )
-        .map( coord => { x : coord.x + offset.x,
-                         y : coord.y + offset.y } )
-        .map( coord => {
-                        x : coord.x + Math.random() * wobble,
-                        y : coord.y + Math.random() * wobble } )
+        .map( coord => { return { x : coord.x * scale, y : coord.y * scale }} )
+        .map( coord => { return { x : coord.x + offset.x, y : coord.y + offset.y }} )
+        .map( coord => { return { x : coord.x + Math.random() * wobble, y : coord.y + Math.random() * wobble }} )
 
     return movedStars
 }
