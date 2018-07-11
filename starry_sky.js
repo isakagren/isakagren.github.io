@@ -3,10 +3,7 @@ var search_input = document.getElementById("search");
 var    context = canvas.node().getContext("2d");
 var    width = canvas.property("width");
 var    height = canvas.property("height");
-var image = new Image;
-    image = document.getElementById("star");
-var card = new Image;
-    card = document.getElementById("card");
+
 var currentScale = 1.0;
 var randomX = d3.randomNormal(width / 2, 80);
 var randomY = d3.randomNormal(height / 2, 80);
