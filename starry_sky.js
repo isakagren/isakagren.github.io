@@ -1,160 +1,180 @@
-var canvas = d3.select("canvas").call(d3.zoom().scaleExtent([1, 8]).on("zoom", zoom));
+var canvas = d3.select("canvas").call(d3.zoom().scaleExtent([0.1, 8]).on("zoom", zoom));
 var search_input = document.getElementById("search");
 var    context = canvas.node().getContext("2d");
 var    width = canvas.property("width");
 var    height = canvas.property("height");
 
 var currentScale = 1.0;
-var randomX = d3.randomNormal(width / 2, 80);
-var randomY = d3.randomNormal(height / 2, 80);
-var data = [
-      {
-          "user_id": 1,
-          "first_name": "Pelle",
-          "last_name": "Pärson",
-          "track_name": "SkaparstudioBarn"
-      },
-      {
-          "user_id": 2,
-          "first_name": "Anna",
-          "last_name": "Eriksson",
-          "track_name": "Unity"
-      },
-      {
-          "user_id": 3,
-          "first_name": "Erik",
-          "last_name": "Karlsson",
-          "track_name": "Minecraft"
-      },
-      {
-          "user_id": 4,
-          "first_name": "Filip",
-          "last_name": "Philipsson",
-          "track_name": "Python"
-      },
-      {
-          "user_id": 5,
-          "first_name": "Karin",
-          "last_name": "Karlsdotter",
-          "track_name": "Webb"
-      },
-      {
-          "user_id": 6,
-          "first_name": "Albin",
-          "last_name": "Byström",
-          "track_name": "Webb"
-      },
-      {
-          "user_id": 7,
-          "first_name": "Karl",
-          "last_name": "Karlsson",
-          "track_name": "Minecraft"
-      },
-      {
-          "user_id": 8,
-          "first_name": "Isak",
-          "last_name": "Ågren",
-          "track_name": "Python"
-      }     
-  ];
 
+var offsetX = 40;
+var offsetY = -20;
+
+var randomX = d3.randomNormal(width / 2, width / 4);
+var randomY = d3.randomNormal(height / 2, height / 4);
 
 var listOfStars = [];
 var listOfPaths = [];
-var numberOfStars = 2 * data.length;
-/*for (var i = 0; i < numberOfStars; i++) {
-  var star = {};
-  //  Math.seedrandom(data[i]["first_name"] + data[i]["track_name"]);
-  star['x'] = 0;//random() * width;
-  star['y'] =  0;//random() * height;
-  star['size'] = Math.random() * size + minSize;
-  star['id'] = i;
-  //var img = document.getElementById("star");
-  listOfStars.push(star);
-}*/
 
-starData = generateStarCoordinets(
-  data.length,
-  test_constellation,
-  { x : width / 2, y : height / 2 }, 
-  150,
-  10,
-  Math.PI/2
-);
+var starData = {};
+var numberOfStars = data.length;
 
-listOfStars = starData.stars;
-listOfPaths = starData.paths;
+
+var j = 0;;
+
+while ( j < data.length / 4) {
+  var constellation = newConstellation();
+  console.log(j);
+  starData = generateStarCoordinets(
+    constellation.nodes.length,
+    constellation,
+    { x :Math.random()*width, y : Math.random()*height},
+    100 + 50 * Math.random(),
+    10,
+    2*Math.PI * Math.random()
+  );
+
+  var place = true;
+  for (var i = 0; i < constellation.nodes.length; i++) {
+    if(!canPlace(starData.stars[i])){
+      place = false;
+    }
+  }
+  if (place) {
+    listOfStars = listOfStars.concat(starData.stars);
+    listOfPaths = listOfPaths.concat(starData.paths);
+    j += constellation.nodes.length;
+  }
+}
+while ( j < numberOfStars) {
+    var star = {};
+    star.x = randomX();
+    star.y = randomY();
+    if(canPlace(star)){
+      listOfStars.push(star);
+      j++;
+    }
+}
 
 draw();
 
 function zoom() {
-  var transform = d3.event.transform;
-  context.save();
-  context.clearRect(0, 0, width, height);
-  context.translate(transform.x, transform.y);
-  //console.log(transform.k);
-  context.scale(transform.k, transform.k);
-  currentScale = transform.k;
-  draw();
-  context.restore();
+    var transform = d3.event.transform;
+    context.save();
+    context.clearRect(0, 0, width, height);
+    context.translate(transform.x, transform.y);
+    //console.log(transform.k);
+    context.scale(transform.k, transform.k);
+    currentScale = transform.k;
+    draw();
+    context.restore();
+}
+
+
+
+function draw() {
+  drawLines();
+  drawStars();
+}
+
+function drawStars(){
+  context.beginPath();
+  for(var i = 0; i < listOfStars.length; i++) {
+    var d = listOfStars[i];
+    // Move context to draw point
+    context.moveTo(d["x"], d["y"])
+    // Draw stars on screen
+    context.arc(d["x"], d["y"], 2, 0, 2 * Math.PI);
+    // Print first name if zoomed in
+    if(currentScale > 2){
+      // Center name text
+      context.textAlign="center";
+      // Print text above the star
+      context.fillText(
+        data[i]["first_name"],
+        d["x"],
+        d["y"] - 10 // 10 is offset to the star
+      );
+    }
+  }
+  // Fill canvas
+  context.fill();
 }
 
 function drawLines() {
-    // Draw paths
-    for (i = 0; i < listOfPaths.length; i++) {
+    // Draw all lines in an constellation
+    context.beginPath();
+    for (var i = 0; i < listOfPaths.length; i++) {
       var path = listOfPaths[i];
-      context.beginPath();
+      // Start point of line
       context.moveTo(path.start.x, path.start.y);
+      // End point of line
       context.lineTo(path.end.x, path.end.y);
-      context.strokeStyle = "#aaaaaa";
+      // Color of line
+      context.strokeStyle = "#edeeef";
+      // Thickness if line
       context.lineWidth = 1.5;
-      context.stroke();
-  
     }
+    // Draw lines
+    context.stroke();
 }
 
-function draw() {
-
-  drawLines();
-  var i = -1, n = listOfStars.length, d;
-  context.beginPath();
-  while (++i < n) {
-    d = listOfStars[i];
-    context.moveTo(d["x"], d["y"])
-
-    // Draw stars on screen
-    context.arc(d["x"], d["y"], 2, 0, 2 * Math.PI);
-
-    if(currentScale > 2){
-      //context.drawImage(card, d["x"]*200, d["y"]*200 - (card.height / card.width) * 100 , 100, (card.height / card.width) * 100);
-      context.fillText(data[i % data.length]["first_name"], d["x"]- 10, d["y"] - 20);
-    }
-
-  }
-  context.fill();
-
-
-
-}
-
+// Input: name to search for
+// Goal: to center searched star in center of screen
+// NOTE: Not finnished. Need to figure out how to move viewport to the correct
+// location
 function search(name){
-  // find name
+  // Linerar seacrh for name, could be optimized with binnary search but
+  // for now length of data is around 200
   for (var i = 0; i < data.length; i++) {
     if(data[i]["first_name"] == name){
-      // move to point
-      const t = d3.zoomIdentity.translate(width/2 - listOfStars[i]["x"]*200, height/2 - listOfStars[i]["y"]*200).scale(3);
-      console.log(d3.zoom().transform );
+      // If name is found then move viewport so that corresponding star is in center
+      const t = d3.zoomIdentity.translate(
+        width/2 - listOfStars[i]["x"]*200,  // X value
+        height/2 - listOfStars[i]["y"]*200  // Y value
+      ).scale(3);                           // Zoom value
+
       canvas.transition()
         .duration(10)
         .call( d3.zoom().transform, t ); // updated for d3 v4
 
       draw();
-
     }
   }
 }
 
+// Add event lisenter to canvas
 search_input.addEventListener('keyup', function(){
   search(search_input.value);
   draw();
 })
+
+// Return a constellation from a pre defined set of constellations
+function newConstellation(){
+  var rand = Math.floor(Math.random() * 3);
+  if(rand == 1){
+    return test_constellation;
+  }
+  else if(rand == 2){
+    return test_constellation2;
+  }
+  else {
+    return test_constellation3;
+  }
+}
+
+// Input: star to check if it overlaps with other stars
+// Return ture if no prev placed stars over lap, otherwise falss
+function canPlace(star){
+  // Linear search for overlapping stars. Could be optimized with a sweep
+  // algorithm.
+  for (var i = 0; i < listOfStars.length; i++) {
+    if(star.x > listOfStars[i].x - offsetX &&
+       star.x < listOfStars[i].x + offsetX &&
+       star.y < listOfStars[i].y - offsetY &&
+       star.y > listOfStars[i].y + offsetY
+     ){
+      return false;
+    }
+  }
+  return true;
+}

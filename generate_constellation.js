@@ -27,15 +27,36 @@ var test_constellation2 = {
         { id: 4, x: 1, y: -0.25},
         { id: 5, x: 3, y: -0.5},
         { id: 6, x: 2.75, y: -1.2},
-        { id: 6, x: 3.25, y: 0.2}
+        { id: 7, x: 3.25, y: 0.2}
     ],
     paths: [
+        { id: 0, start: 0, end: 1},
         { id: 1, start: 1, end: 2},
         { id: 2, start: 2, end: 3},
-        { id: 3, start: 1, end: 3},
-        { id: 0, start: 0, end: 1}
+        { id: 3, start: 1, end: 4},
+        { id: 4, start: 4, end: 5},
+        { id: 4, start: 5, end: 6},
+        { id: 4, start: 5, end: 7}
     ]
 };
+
+var test_constellation3 = {
+    nodes: [
+        { id: 0, x: 0, y: 0},
+        { id: 1, x: 1, y: -0.1},
+        { id: 2, x: 1.5, y: 3},
+        { id: 3, x: 0.7, y: 3.5},
+        { id: 4, x: -0.3, y: 2}
+    ],
+    paths: [
+        { id: 0, start: 0, end: 1},
+        { id: 1, start: 1, end: 2},
+        { id: 2, start: 2, end: 3},
+        { id: 3, start: 3, end: 4},
+        { id: 4, start: 4, end: 0}
+    ]
+};
+
 
 
 function generateStarCoordinets (numberOfStars, constellation, offset, scale, wobble, angle) {
