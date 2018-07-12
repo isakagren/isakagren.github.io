@@ -48,18 +48,13 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
             x: constellation.nodes[i].x,
             y: constellation.nodes[i].y
         } )
-<<<<<<< HEAD
 
-
-=======
-    
     var remaningStars = numberOfStars - generatedStars.length
-    
->>>>>>> a07863879616d0113ba7b3e9198e81434531fad0
+
     // fill the lines between stars
     for (i = 0; i < constellation.paths.length; i++) {
         var path = constellation.paths[i]
-        
+
         var starsOnThisPath = Math.floor(remaningStars / constellation.paths.length) + (i < remaningStars % constellation.paths.length)
 
         for (j = 1; j < starsOnThisPath + 1; j++) {
