@@ -52,12 +52,12 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
     var remaningStars = numberOfStars - generatedStars.length
 
     // fill the lines between stars
-    for (i = 0; i < constellation.paths.length; i++) {
+    for (var i = 0; i < constellation.paths.length; i++) {
         var path = constellation.paths[i]
 
         var starsOnThisPath = Math.floor(remaningStars / constellation.paths.length) + (i < remaningStars % constellation.paths.length)
 
-        for (j = 1; j < starsOnThisPath + 1; j++) {
+        for (var j = 1; j < starsOnThisPath + 1; j++) {
             var deltaX = constellation.nodes[path.end].x - constellation.nodes[path.start].x
             var deltaY = constellation.nodes[path.end].y - constellation.nodes[path.start].y
             var coords = {
@@ -69,23 +69,15 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
         }
     }
 
-    // for (i = 0; i < remaningStars; i++)
-    //     generatedStars.push({ x: Math.random(-3, 1), y: Math.random(-0.5, 1.5) })
-
-
     // Move stars according to scale. offset and wobble
     var movedStars = generatedStars
         .map( coord => { return { x : coord.x * Math.cos(angle) - coord.y * Math.sin(angle), y: coord.x * Math.sin(angle) + coord.y * Math.cos(angle)} })
         .map( coord => { return { x : coord.x * scale, y : coord.y * scale }} )
         .map( coord => { return { x : coord.x + offset.x, y : coord.y + offset.y }} )
         .map( coord => { return { x : coord.x + Math.random() * wobble, y : coord.y + Math.random() * wobble }} )
-        
-    console.log(movedStars)
-        // cos -sin
-        // sin  cos
 
     var paths = []
-    for (i = 0; i < constellation.paths.length; i++) {
+    for (var i = 0; i < constellation.paths.length; i++) {
         var path = constellation.paths[i]
         if (movedStars[path.start] && movedStars[path.end])
             paths.push({start: movedStars[path.start], end: movedStars[path.end]})
