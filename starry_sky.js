@@ -43,11 +43,24 @@ var data = [
           "first_name": "Albin",
           "last_name": "Byström",
           "track_name": "Webb"
-      }
+      },
+      {
+          "user_id": 7,
+          "first_name": "Karl",
+          "last_name": "Karlsson",
+          "track_name": "Minecraft"
+      },
+      {
+          "user_id": 8,
+          "first_name": "Isak",
+          "last_name": "Ågren",
+          "track_name": "Python"
+      }     
   ];
 
 
 var listOfStars = [];
+listOFPaths = [];
 var numberOfStars = 2 * data.length;
 /*for (var i = 0; i < numberOfStars; i++) {
   var star = {};
@@ -60,13 +73,16 @@ var numberOfStars = 2 * data.length;
   listOfStars.push(star);
 }*/
 
-listOfStars = generateStarCoordinets(
+starData = generateStarCoordinets(
   data.length,
   test_constellation,
   { x : width / 2, y : height / 2 }, 
   150,
   10
 );
+
+listOfStars = starData.stars;
+listOFPaths = starData.paths;
 
 console.log(listOfStars);
 draw();

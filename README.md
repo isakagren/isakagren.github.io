@@ -9,7 +9,8 @@ Saker att göra:
 2. Testa med riktig data
 3. Filtrera data
 4. UI - sök
-5. Touch
+5. ~~Touch~~
 6. Animering
 7. Grafik
 8. Positionen för en deltagare bör vara samma varje gång
+9. Skapa ett verktyg för att kunna skapa stjärnbilder grafiskt
