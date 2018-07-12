@@ -58,6 +58,7 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
         .map( coord => { return { x : coord.x * scale, y : coord.y * scale }} )
         .map( coord => { return { x : coord.x + offset.x, y : coord.y + offset.y }} )
         .map( coord => { return { x : coord.x + Math.random() * wobble, y : coord.y + Math.random() * wobble }} )
+        // TODO: .map( coord => { return { rotated coordinates } })
 
     var paths = []
     for (i = 0; i < constellation.paths.length; i++) {

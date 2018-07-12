@@ -60,7 +60,7 @@ var data = [
 
 
 var listOfStars = [];
-listOFPaths = [];
+var listOfPaths = [];
 var numberOfStars = 2 * data.length;
 /*for (var i = 0; i < numberOfStars; i++) {
   var star = {};
@@ -82,7 +82,7 @@ starData = generateStarCoordinets(
 );
 
 listOfStars = starData.stars;
-listOFPaths = starData.paths;
+listOfPaths = starData.paths;
 
 console.log(listOfStars);
 draw();
@@ -99,7 +99,23 @@ function zoom() {
   context.restore();
 }
 
+function drawLines() {
+    // Draw paths
+    for (i = 0; i < listOfPaths.length; i++) {
+      var path = listOfPaths[i];
+      context.beginPath();
+      context.moveTo(path.start.x, path.start.y);
+      context.lineTo(path.end.x, path.end.y);
+      context.strokeStyle = "#aaaaaa";
+      context.lineWidth = 1.5;
+      context.stroke();
+  
+    }
+}
+
 function draw() {
+
+  drawLines();
   var i = -1, n = listOfStars.length, d;
   context.beginPath();
   while (++i < n) {
@@ -116,6 +132,9 @@ function draw() {
 
   }
   context.fill();
+
+
+
 }
 
 function search(name){
