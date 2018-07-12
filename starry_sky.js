@@ -60,6 +60,7 @@ var data = [
 
 
 var listOfStars = [];
+listOFPaths = [];
 var numberOfStars = 2 * data.length;
 /*for (var i = 0; i < numberOfStars; i++) {
   var star = {};
@@ -72,13 +73,16 @@ var numberOfStars = 2 * data.length;
   listOfStars.push(star);
 }*/
 
-listOfStars = generateStarCoordinets(
+starData = generateStarCoordinets(
   data.length,
   test_constellation,
   { x : width / 2, y : height / 2 }, 
   150,
   10
 );
+
+listOfStars = starData.stars;
+listOFPaths = starData.paths;
 
 console.log(listOfStars);
 draw();
