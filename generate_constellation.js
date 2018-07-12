@@ -43,7 +43,7 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
     var generatedStars = []
 
     // Fill the fixed nodes
-    for (i = 0; i < numberOfStars && i < constellation.nodes.length; i++)
+    for (var i = 0; i < numberOfStars && i < constellation.nodes.length; i++)
         generatedStars.push( {
             x: constellation.nodes[i].x,
             y: constellation.nodes[i].y
