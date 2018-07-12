@@ -78,13 +78,13 @@ starData = generateStarCoordinets(
   test_constellation,
   { x : width / 2, y : height / 2 }, 
   150,
-  10
+  10,
+  Math.PI/2
 );
 
 listOfStars = starData.stars;
 listOfPaths = starData.paths;
 
-console.log(listOfStars);
 draw();
 
 function zoom() {

@@ -38,7 +38,7 @@ var test_constellation2 = {
 };
 
 
-function generateStarCoordinets (numberOfStars, constellation, offset, scale, wobble) {
+function generateStarCoordinets (numberOfStars, constellation, offset, scale, wobble, angle) {
 
     var generatedStars = []
 
@@ -75,10 +75,14 @@ function generateStarCoordinets (numberOfStars, constellation, offset, scale, wo
 
     // Move stars according to scale. offset and wobble
     var movedStars = generatedStars
+        .map( coord => { return { x : coord.x * Math.cos(angle) - coord.y * Math.sin(angle), y: coord.x * Math.sin(angle) + coord.y * Math.cos(angle)} })
         .map( coord => { return { x : coord.x * scale, y : coord.y * scale }} )
         .map( coord => { return { x : coord.x + offset.x, y : coord.y + offset.y }} )
         .map( coord => { return { x : coord.x + Math.random() * wobble, y : coord.y + Math.random() * wobble }} )
-        // TODO: .map( coord => { return { rotated coordinates } })
+        
+    console.log(movedStars)
+        // cos -sin
+        // sin  cos
 
     var paths = []
     for (i = 0; i < constellation.paths.length; i++) {
