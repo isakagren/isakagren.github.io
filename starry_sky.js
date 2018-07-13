@@ -1,6 +1,6 @@
 var canvas = d3.select("canvas")
     .call(d3.zoom()
-    .scaleExtent([0.01, 8])  // Zoom range for canvas
+    .scaleExtent([0.13, 8])  // Zoom range for canvas
     .on("zoom", zoom)
   );
 
@@ -21,6 +21,7 @@ var offsetY = -20;
 var randomX = d3.randomNormal(width / 2, width / 4);
 var randomY = d3.randomNormal(height / 2, height / 4);
 
+
 var listOfStars = [];
 var listOfPaths = [];
 
@@ -28,17 +29,32 @@ var starData = {};
 var numberOfStars = 1000;//data.length;
 
 window.onload = function(){
+  for (var i = -2; i <= 2; i++) {
+    for (var j = -2; j <= 2; j++) {
+      var originX = 2 * i * width / 2;
+      var originY = 2.5 * j * height / 2;
+      createGalaxy(originX, originY, data);
+    }
+  }
+  draw();
+};
+
+
+function createGalaxy(x, y, dataSet){
   var j = 0;
-  while ( j < data.length / 4 ) {
+  while ( j < dataSet.length / 4 ) {
     var constellation = newConstellation();
 
     starData = generateStarCoordinets(
-      constellation.nodes.length,
-      constellation,
-      { x :Math.random()*width, y : Math.random()*height},
-      100 + 50 * Math.random(),
-      10,
-      2*Math.PI * Math.random()
+      constellation.nodes.length,       // Size of constellation
+      constellation,                    // Constellation
+      {
+        x : Math.random() * width + x,  // X position
+        y : Math.random() * height + y  // Y position
+      },
+      100 + 50 * Math.random(),         // Scale of constellation
+      10,                               // Woabble of stars
+      2*Math.PI * Math.random()         // Rotation of constellation
     );
 
     var place = true;
@@ -53,17 +69,16 @@ window.onload = function(){
       j += constellation.nodes.length;
     }
   }
-  while ( j < numberOfStars) {
-      var star = {};
-      star.x = randomX();
-      star.y = randomY();
-      if(canPlace(star)){
-        listOfStars.push(star);
-        j++;
-      }
+  while ( j < dataSet.length) {
+    var star = {};
+    star.x = randomX() + x;
+    star.y = randomY() + y;
+    if(canPlace(star)){
+      listOfStars.push(star);
+      j++;
+    }
   }
-  draw();
-};
+}
 
 
 
@@ -72,7 +87,7 @@ function zoom() {
     context.save();
     context.clearRect(0, 0, width, height);
     context.translate(transform.x, transform.y);
-    //console.log(transform.k);
+    console.log(transform.k);
     context.scale(transform.k, transform.k);
     currentScale = transform.k;
     draw();
@@ -96,6 +111,21 @@ function drawStars(){
     if(currentScale > 0.8){
       context.arc(d["x"], d["y"], 2, 0, 2 * Math.PI);
     }
+    else if (currentScale < 0.08) {
+      context.arc(d["x"], d["y"], 5 / currentScale, 0, 2 * Math.PI);
+      context.fillStyle = "#edeeef";
+      i++;
+    }
+    else if (currentScale < 0.03) {
+      context.arc(d["x"], d["y"], 5 / currentScale, 0, 2 * Math.PI);
+      context.fillStyle = "#edeeef";
+      i+=3;
+    }
+    else if (currentScale < 0.01) {
+      context.arc(d["x"], d["y"], 5 / currentScale, 0, 2 * Math.PI);
+      context.fillStyle = "#edeeef";
+      i+=7;
+    }
     else{
       context.arc(d["x"], d["y"], 5 / currentScale, 0, 2 * Math.PI);
       context.fillStyle = "#edeeef";
@@ -118,6 +148,8 @@ function drawStars(){
 }
 
 function drawLines() {
+    if(currentScale < 0.8)
+      return;
     // Draw all lines in an constellation
     context.beginPath();
     for (var i = 0; i < listOfPaths.length; i++) {
