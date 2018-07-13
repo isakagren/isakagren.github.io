@@ -1,8 +1,11 @@
 var canvas = d3.select("canvas")
     .call(d3.zoom()
-    .scaleExtent([0.01, 8])
-    .on("zoom", zoom));
+    .scaleExtent([0.01, 8])  // Zoom range for canvas
+    .on("zoom", zoom)
+  );
+
 var search_input = document.getElementById("search");
+
 var context = canvas.node().getContext("2d");
 
 var width = canvas.property("width");
@@ -14,6 +17,7 @@ var currentScale = 1.0;
 var offsetX = 40;
 var offsetY = -20;
 
+
 var randomX = d3.randomNormal(width / 2, width / 4);
 var randomY = d3.randomNormal(height / 2, height / 4);
 
@@ -21,7 +25,7 @@ var listOfStars = [];
 var listOfPaths = [];
 
 var starData = {};
-var numberOfStars = data.length;
+var numberOfStars = 1000;//data.length;
 
 window.onload = function(){
   var j = 0;
@@ -93,7 +97,7 @@ function drawStars(){
       context.arc(d["x"], d["y"], 2, 0, 2 * Math.PI);
     }
     else{
-      context.arc(d["x"], d["y"], 3 / currentScale, 0, 2 * Math.PI);
+      context.arc(d["x"], d["y"], 5 / currentScale, 0, 2 * Math.PI);
       context.fillStyle = "#edeeef";
     }
 
@@ -103,7 +107,7 @@ function drawStars(){
       context.textAlign="center";
       // Print text above the star
       context.fillText(
-        data[i]["first_name"],
+        data[i % data.length]["first_name"],
         d["x"],
         d["y"] - 10 // 10 is offset to the star
       );
